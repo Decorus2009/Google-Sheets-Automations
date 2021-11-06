@@ -42,21 +42,34 @@ function isMolniaEntry(e: TinkoffDataRowEntry): boolean {
 }
 
 function isTinkoffProSubscription(e: TinkoffDataRowEntry): boolean {
-  return e.rawAmout === TINKOFF_PRO_AMOUNT && e.rawTinkoffCategory === TinkoffCategory.OTHER_SERVICES_IB && e.rawDescription === EXPENSE_DESCRIPTION_SPECIAL_CASES.TINKOFF_PRO_DESCRIPTION
+  return e.rawAmout === TINKOFF_PRO_AMOUNT 
+    && e.rawTinkoffCategory === TinkoffCategory.OTHER_SERVICES_IB   
+    && e.rawDescription === TINKOFF__EXPENSE_DESCRIPTION_SPECIAL_CASES.TINKOFF_PRO_DESCRIPTION
 }
 
 function isTinkoffBalanceInterest(e: TinkoffDataRowEntry): boolean {
-  return e.rawAmout > 0 && e.rawTinkoffCategory === TinkoffCategory.OTHER && e.rawDescription === INCOME_DESCRIPTION_SPECIAL_CASES.BALANCE_INTEREST
+  return e.rawAmout > 0 
+    && e.rawTinkoffCategory === TinkoffCategory.OTHER 
+    && e.rawDescription === TINKOFF__INCOME_DESCRIPTION_SPECIAL_CASES.BALANCE_INTEREST
 }
 
 function isTinkoffCashback(e: TinkoffDataRowEntry): boolean {
-  return e.rawAmout > 0 && e.rawTinkoffCategory === TinkoffCategory.OTHER && e.rawDescription === INCOME_DESCRIPTION_SPECIAL_CASES.PURCHASE_REWARD
+  return e.rawAmout > 0 
+    && e.rawTinkoffCategory === TinkoffCategory.OTHER 
+    && (e.rawDescription === TINKOFF__INCOME_DESCRIPTION_SPECIAL_CASES.PURCHASE_REWARD
+    || e.rawDescription === TINKOFF__INCOME_DESCRIPTION_SPECIAL_CASES.TRAVEL_BONUS)
+}
+
+function isTinkoffOperationCommission(e: TinkoffDataRowEntry): boolean {
+  return e.rawAmout < 0 
+    && e.rawTinkoffCategory === TinkoffCategory.OTHER 
+    && e.rawDescription === TINKOFF__EXPENSE_DESCRIPTION_SPECIAL_CASES.OPERATION_COMMISSION
 }
 
 function isAppStoreITunesSubscription(e: TinkoffDataRowEntry): boolean {
   return e.rawAmout < 0 
     && e.rawTinkoffCategory === TinkoffCategory.OTHER_OPERATIONS 
-    && e.rawDescription === EXPENSE_DESCRIPTION_SPECIAL_CASES.APPSTORE_ITUNES
+    && e.rawDescription === TINKOFF__EXPENSE_DESCRIPTION_SPECIAL_CASES.APPSTORE_ITUNES
     && e.rawMCC === 5815
 }
 

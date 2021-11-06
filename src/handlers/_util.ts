@@ -119,6 +119,7 @@ function formatAllValues() {
 
   // additional formatting for aux range: total income, savings, daily budget
   const auxRange = getRange(AUX_RANGE_TEXT)
+  const auxSavingsHeaderRange = getRange(AUX_SAVINGS_HEADER_RANGE_TEXT)
   const auxSavingsRange = getRange(AUX_SAVINGS_RANGE_TEXT)
 
   auxRange.setTextStyle(SpreadsheetApp.newTextStyle()
@@ -129,6 +130,11 @@ function formatAllValues() {
   auxSavingsRange.setTextStyle(SpreadsheetApp.newTextStyle()
     .setFontFamily(FONT)
     .setFontSize(11)
+    .build())
+
+  auxSavingsHeaderRange.setTextStyle(SpreadsheetApp.newTextStyle()
+    .setFontFamily(FONT)
+    .setFontSize(12)
     .build())
 }
 

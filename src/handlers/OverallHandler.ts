@@ -1,21 +1,3 @@
-// function computeDailyAndMonthlyStatistics() {
-//   // scan if there are red cells in 'operation type' and 'my category' ranges (tinkoff and other)
-//   checkForUnfilledCellsInData()
-
-//   clearOldDailyAndMonthlyStatistics()
-
-//   const mergedUniversalDataEntries = mergeAndSortByDate()
-//   const datesToUniversalDataEntries = mapByDate(mergedUniversalDataEntries)
-
-//   computeDailyStatistics(datesToUniversalDataEntries)
-
-//   computeActualMonthlyStatistics(mergedUniversalDataEntries, MONTHLY__ACTUAL_INCOMES_RANGE_TEXT, OperationType.INCOME)
-//   computeActualMonthlyStatistics(mergedUniversalDataEntries, MONTHLY__ACTUAL_EXPENSES_RANGE_TEXT, OperationType.EXPENSE)
-  
-//   // TODO fix column and row widths
-//   formatAllValues()
-// }
-
 /**
  * Checks whether there're cells in 'operation type' and 'my category' ranges (for both Tinkoff and other data)
  * marked as red, i.e. cell that should be manually filled. 

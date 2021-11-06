@@ -19,6 +19,9 @@ function processDailyAndMonthlyStatistics() {
 
   compareEstimatedAndActualExpensesAux()
 
-  // TODO fix column and row widths
   formatAllValues()
+}
+
+function sortSelectedEstimationRecords() {
+  sortSelectedEstimationRecords0()
 }

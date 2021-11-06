@@ -11,10 +11,10 @@ function maybeTinkoffDataIsPlannedEdited(e) {
 
   const currentValue = rangeEdited.getValue() // does not work via e.value
 
-  if (isEmpty(currentValue)) {
-    rangeEdited.insertCheckboxes()
-    return
-  }
+  // if (isEmpty(currentValue)) {
+  //   rangeEdited.insertCheckboxes()
+  //   return
+  // }
 
   markAsManuallyHandled(rangeEdited)
 
@@ -113,14 +113,6 @@ function maybeTinkoffDataMyCategoryEdited(e) {
 
   manualEditingInfo.markMyCategoryEdited()
   manualEditingInfoRange.setValue(manualEditingInfo.toString())
-}
-
-/**
- * Case when some rows were copied 
- */
-function maybeTinkoffRawDataRowsAdded(e) {
-  const rangeEdited: GoogleAppsScript.Spreadsheet.Range = e.range
-
 }
 
 

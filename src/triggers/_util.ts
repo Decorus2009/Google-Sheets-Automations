@@ -44,15 +44,13 @@ function isInRowBounds(
 /**
  * For checking if a value in single-cell range is not empty and is a number. Mark appropriately
  */
-function markAsWarningIfNotNumericOrEmptySingleCell(range: GoogleAppsScript.Spreadsheet.Range, outerCondition: boolean) {
-  if (outerCondition) {
-    const newValue = range.getDisplayValue()
+function markAsWarningIfNotNumericOrEmptySingleCell(range: GoogleAppsScript.Spreadsheet.Range) {
+  const newValue = range.getDisplayValue()
 
-    if (isEmpty(newValue) || !isNumericString(newValue)) {
-      markAsWarning(range)
-    } else {
-      markAsManuallyHandled(range)
-    }
+  if (isEmpty(newValue) || !isNumericString(newValue)) {
+    markAsWarning(range)
+  } else {
+    markAsManuallyHandled(range)
   }
 }
 

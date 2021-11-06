@@ -21,13 +21,20 @@ function computeActualMonthlyStatistics(
 
       setValueOrAddValueIfKeyExists(myCategoriesToAmounts, category, amount)
     }
-    if (isCompensation(operationType)) {
+
+    // account compensations only for expenses
+    if (operationType === OperationType.EXPENSE && isCompensation(e.operationType)) {
       const category = e.myCategory
       const compensation = e.amount
      
       setValueOrAddValueIfKeyExists(myCategoriesToAmounts, category, -compensation)
     }
   })
+
+  // what if e.g. no income have been found yet? 
+  if (myCategoriesToAmounts.size === 0) {
+    return
+  }
 
   var resultArray = [];
   // note the 'forEach' signature (value goes first)
@@ -86,9 +93,9 @@ function compareEstimatedAndActualExpensesAux() {
   }
 
   const estimatedExpensesDisplayValues = getRange(
-    MONTHLY__ESTIMATED_EXPENSES_KEYS_LETTER + MONTHLY__KEYS_ROWS_LOWER_LIMIT.toString() + 
+    MONTHLY__ESTIMATED_EXPENSES_CATEGORY_LETTER + MONTHLY__KEYS_ROWS_LOWER_LIMIT.toString() + 
     ":" + 
-    MONTHLY__ESTIMATED_EXPENSES_VALUES_LETTER + MONTHLY__KEYS_ROWS_UPPER_LIMIT.toString()
+    MONTHLY__ESTIMATED_EXPENSES_AMOUNT_LETTER + MONTHLY__KEYS_ROWS_UPPER_LIMIT.toString()
   ).getDisplayValues()
 
   const actualExpensesDisplayValues = getRange(

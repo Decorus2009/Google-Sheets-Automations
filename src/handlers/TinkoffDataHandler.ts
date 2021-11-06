@@ -80,10 +80,6 @@ function makeSelectable(range: GoogleAppsScript.Spreadsheet.Range, valuesList: s
   range.setDataValidation(rule)
 }
 
-function requireDateValidationForOtherDataDateColumn() {
-  requireDateValidationForRange(getRange(OTHER__DATE_RANGE_TEXT))
-}
-
 function requireDateValidationForRange(range: GoogleAppsScript.Spreadsheet.Range) {
   range.setDataValidation(dateValidationRule())
   range.setNumberFormat("dd.MM.yyyy")
@@ -272,45 +268,6 @@ function tinkoffDataRowPredicateWithRemoval(considerRemovable: boolean): (row: a
   return tinkoffDataRowPredicate
 }
 
-// const tinkoffDataRowPredicate = (row: any[]) => {
-//   if (row.every(el => isEmpty(el))) {
-//     return false
-//   }
-
-//   const tinkoffEntry = new TinkoffDataRowEntry(row)
-//   if (tinkoffEntry.shouldBeRemoved()) {
-//     return false
-//   }
-
-//   return true
-// }
-
-/**
- * @returns a single-column range defined by the @param columnOffset with regard to @param initialRange
- */
-function getSingleColumnRangeAfter(
-  initialRange: GoogleAppsScript.Spreadsheet.Range,
-  columnOffset: number
-): GoogleAppsScript.Spreadsheet.Range {
-  const initialStartRowInd = initialRange.getRow()
-  const initialEndColInd = initialRange.getColumn() + initialRange.getNumColumns() - 1
-  // first column after filtered range if columnOffset == 1
-  // or
-  // second column after filtered range if columnOffset == 2
-  const rangeToWriteResultColInd = initialEndColInd + columnOffset
-
-  // single-column range
-  return getActiveSheet().getRange(initialStartRowInd, rangeToWriteResultColInd, initialRange.getNumRows(), 1)
-}
-
-function getSingleColumnRangeFromEnd(range: GoogleAppsScript.Spreadsheet.Range, columnBackOffset: number): GoogleAppsScript.Spreadsheet.Range {
-  return getActiveSheet().getRange(
-    range.getRow(),
-    range.getColumn() + range.getNumColumns() - (columnBackOffset + 1),
-    range.getNumRows(),
-    1
-  )
-}
 
 function getTinkoffDataIsPlannedRange(tinkoffDataFilteredRange: GoogleAppsScript.Spreadsheet.Range): GoogleAppsScript.Spreadsheet.Range {
   const columnBackOffset = TINKOFF__IS_PLANNED_COLUMN_BACK_OFFSET

@@ -9,6 +9,10 @@ function onEdit(e) {
   maybeTinkoffDataOperationTypeEdited(e)
   maybeTinkoffDataMyCategoryEdited(e)
 
+  // should be called before triggers below so that they don't interfere on 
+  // row cells clearing
+  maybeWholeOtherDataRowsCleared(e)  
+
   maybeOtherDataIsPlannedEdited(e)
   maybeOtherDataDateEdited(e)
   maybeOtherDataAmountEdited(e)

@@ -2,6 +2,23 @@
 function maybeOtherDataIsPlannedEdited(e) {
   const rangeEdited: GoogleAppsScript.Spreadsheet.Range = e.range
 
+
+  // // interseption due to a bug descried in [maybeWholeOtherDataRowsCleared] below
+  // // intended for a case when a user selects the whole row (including isPlanned column)
+  // // in this case [rangeEdited] is somehow equal to range corresponding to isPlanned column only
+  // const rowWithoutIsPlannedRange = getRange(OTHER__DATA_WITHOUT_ISPLANNED_RANGE_TEXT)
+  // const displayValues = rowWithoutIsPlannedRange.getDisplayValues()
+  
+  // if (areAllDisplayValuesEmpty(displayValues)) {
+  //   totalClear(rangeEdited)
+  //   // this range is cosidered separately
+  //   totalClear(rowWithoutIsPlannedRange)
+
+  //   // total clear above removes date validation rule for date column, we need to restore it
+  //   requireDateValidationForOtherDataDateColumn()
+  // }
+
+
   if (!isSingleCellRange(rangeEdited)) {
     return
   }
@@ -85,9 +102,7 @@ function maybeOtherDataIsPlannedEdited(e) {
     return
   }
 
-  const outerCondition = true // nothing to check additionally
-
-  markAsWarningIfNotNumericOrEmptySingleCell(rangeEdited, outerCondition)
+  markAsWarningIfNotNumericOrEmptySingleCell(rangeEdited)
 
   const rowOffset = 0 // the same row
   const dateRangeInd = 0
@@ -296,6 +311,39 @@ function maybeOtherDataCommentEdited(e) {
   ]) 
 }
 
+// ---------------------------------- whole row ----------------------------------
+/**
+ * Looks like a bug: when one selects and clears a row WITH inPlanned checkbox cell
+ * edited range is iterpreted as range corresponding to inPlanned checkbox cell only
+ * 
+ * In other cases when checkbox cell is not included, cleared range looks adequate
+ */
+function maybeWholeOtherDataRowsCleared(e) {
+  const rangeEdited: GoogleAppsScript.Spreadsheet.Range = e.range
+
+  // due to the strange behavior 
+  // full width other data range here is a range without isPlanned columns
+  if (!isFullWidthSubrange(rangeEdited, OTHER__DATA_WITHOUT_ISPLANNED_RANGE_TEXT)) {
+    return
+  }
+
+  const displayValues = rangeEdited.getDisplayValues()
+
+  // check if all values in all cells are empty
+  if (!areAllDisplayValuesEmpty(displayValues)) {
+    return
+  }
+
+  // due to the strange behavior, isPlanned column should be taken separately for clearing,
+  // because this column isn't included in [rangeEdited]
+  totalClear(getSingleColumnRangeBefore(rangeEdited, OTHER__IS_PLANNED_OFFSET_FROM_DATE))
+  totalClear(rangeEdited)
+
+  // total clear above removes date validation rule for date column, we need to restore it
+  requireDateValidationForOtherDataDateColumn()
+}
+
+
 // ======================================== PRIVATE ========================================
 function isOtherDataIsPlanned(rangeEdited: GoogleAppsScript.Spreadsheet.Range): boolean {
   return startsWithAndIsInRowBounds(rangeEdited, OTHER__IS_PLANNED_LETTER, DATA_ROWS_LOWER_LIMIT, DATA_ROWS_UPPER_LIMIT)
@@ -419,4 +467,20 @@ function restoreFormattingAndDateValidationRuleForDataRow(
   requireDateValidationForRange(dateRange)
 
   formatValuesCells(dataRowRange)
+}
+
+function requireDateValidationForOtherDataDateColumn() {
+  requireDateValidationForRange(getRange(OTHER__DATE_RANGE_TEXT))
+}
+
+function areAllDisplayValuesEmpty(displayValues: string[][]): boolean {
+  for (const rowInd in displayValues) {
+    const rowValues = displayValues[rowInd]
+
+    if (rowValues.some(it => !isEmpty(it))) {
+      return false
+    }
+  }
+
+  return true
 }

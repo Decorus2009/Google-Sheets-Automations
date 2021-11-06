@@ -2,12 +2,13 @@ function prepareMenus() {
   const ui = SpreadsheetApp.getUi()
 
   ui.createMenu('Automation')
-    .addItem('Prepare data', 'processTinkoffData')
+    .addItem('Prepare records', 'processTinkoffData')
     .addItem('Compute statistics', 'processDailyAndMonthlyStatistics')
+    .addItem('Sort selected estimation records', 'sortSelectedEstimationRecords')
     .addSubMenu(
-      ui.createMenu('Clear (debug)')
-        .addItem('Clear Data', 'clearTinkoffAndOtherData')
-        .addItem('Clear Days/Months', 'clearOldDailyAndMonthlyStatistics')
+      ui.createMenu('Debug')
+        .addItem('Clear records', 'clearTinkoffAndOtherData')
+        .addItem('Clear statistics', 'clearOldDailyAndMonthlyStatistics')
     )
     .addToUi();
 }

@@ -78,7 +78,11 @@ class TinkoffDataRowEntry {
       return OperationType.TRANSFER
     }
 
-    if (inArray([INCOME_DESCRIPTION_SPECIAL_CASES.PURCHASE_REWARD, INCOME_DESCRIPTION_SPECIAL_CASES.BALANCE_INTEREST], this.rawDescription)) {
+    if (inArray([
+      TINKOFF__INCOME_DESCRIPTION_SPECIAL_CASES.PURCHASE_REWARD, 
+      TINKOFF__INCOME_DESCRIPTION_SPECIAL_CASES.BALANCE_INTEREST,
+      TINKOFF__INCOME_DESCRIPTION_SPECIAL_CASES.TRAVEL_BONUS
+    ], this.rawDescription)) {
       return OperationType.INCOME
     }
 
@@ -101,6 +105,7 @@ class TinkoffDataRowEntry {
     // Special cases (crutches): 
     if (isTransport(this))                  return MyExpenseCategory.TRANSPORT
     if (isTinkoffProSubscription(this))     return MyExpenseCategory.SUBSCRIPTIONS
+    if (isTinkoffOperationCommission(this)) return MyExpenseCategory.COMMISSION
     if (isAppStoreITunesSubscription(this)) return MyExpenseCategory.SUBSCRIPTIONS
     if (isRostelecomInternetPayment(this))  return MyExpenseCategory.REGULAR_HOUSE_COMMUNICATNION_BILLS
     if (isMtsMobile(this))                  return MyExpenseCategory.REGULAR_HOUSE_COMMUNICATNION_BILLS
@@ -125,11 +130,11 @@ class TinkoffDataRowEntry {
     const FINANCIAL_SERVICES_CODE = 6012
 
     // e.g. transfer from Sberbank card
-    if (isNumber(code) && code === FINANCIAL_SERVICES_CODE && description === TRANSFER_DESCRIPTION_SPECIAL_CASES.TRANSFER_FROM_CARD) {
+    if (isNumber(code) && code === FINANCIAL_SERVICES_CODE && description === TINKOFF__TRANSFER_DESCRIPTION_SPECIAL_CASES.TRANSFER_FROM_CARD) {
       return true
     }
 
-    if (inArray([TRANSFER_DESCRIPTION_SPECIAL_CASES.TRANSFER_BETWEEN_ACCOUNTS, TRANSFER_DESCRIPTION_SPECIAL_CASES.DEPOSIT_CLOSING], description)) {
+    if (inArray([TINKOFF__TRANSFER_DESCRIPTION_SPECIAL_CASES.TRANSFER_BETWEEN_ACCOUNTS, TINKOFF__TRANSFER_DESCRIPTION_SPECIAL_CASES.DEPOSIT_CLOSING], description)) {
       return true
     }
 
