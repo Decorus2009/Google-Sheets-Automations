@@ -1,6 +1,7 @@
 class TinkoffDataRowEntry {
   // raw values
   rawDateTime: string
+  rawStatus: string
   rawAmout: number
   rawTinkoffCategory: TinkoffCategory
   rawMCC: number
@@ -23,7 +24,8 @@ class TinkoffDataRowEntry {
    */
   constructor(tinkoffDataValues: any[]) { 
     this.rawDateTime = getTinkoffDataDateTime(tinkoffDataValues)
-    this.rawAmout = asNumber(getTinkoffDataAmount(tinkoffDataValues))
+    this.rawStatus = getTinkoffDataStatus(tinkoffDataValues)
+    this.rawAmout = asNumber(getTinkoffDataAmount(tinkoffDataValues)) // maybe use Math.abs(...) ? but why?
     this.rawTinkoffCategory = getTinkoffDataTinkoffCategory(tinkoffDataValues)
     this.rawMCC = asNumber(getTinkoffDataMCC(tinkoffDataValues))
     this.rawDescription = getTinkoffDataDescription(tinkoffDataValues)
@@ -40,7 +42,7 @@ class TinkoffDataRowEntry {
   }
 
   shouldBeRemoved(): boolean {
-    return isMolniaEntryToRemove(this)
+    return isMolniaEntryToRemove(this) || this.rawStatus === TinkoffOperationStatus.FAILED
   }
 
   /**

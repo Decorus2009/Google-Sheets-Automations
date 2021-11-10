@@ -29,7 +29,7 @@ function prepareOperationTypesAndMyCategoriesUsingTinkoffData() {
 
   fixTinkoffNumberColums(tinkoffDataFilteredRange)
 
-  highlightIsPlannedRows(tinkoffDataFilteredRange)
+  highlightPlannedRows(tinkoffDataFilteredRange)
 }
 
 
@@ -46,24 +46,24 @@ function sortRawTinkoffData(tinkoffDataRangeText: string) {
 /**
  * Steps 3 and 4. Define operation types and my categories and fill adjacent columns
  *  
- * (fills a single-column range defined by the @param columnOffset with regard to @param tinkoffDataFilteredRange with values taken from [tEntryPropertyChooser].
+ * (fills a single-column range defined by the @param columnOffset with regard to @param tinkoffDataFilteredRange with values taken from [tinkoffEntryPropertyChooser].
  * Use-cases: operation type column and my category column)
  * @returns defined and filled range (e.g. range corresponding to operation type column or my category column)
  */
 function defineAndFill(
   tinkoffDataFilteredRange: GoogleAppsScript.Spreadsheet.Range,
   rangeToWriteResultChooser: () => GoogleAppsScript.Spreadsheet.Range,
-  tEntryPropertyChooser: (entry: TinkoffDataRowEntry) => string
+  tinkoffEntryPropertyChooser: (entry: TinkoffDataRowEntry) => string
 ): GoogleAppsScript.Spreadsheet.Range {
   const tinkoffDataFilteredValues = tinkoffDataFilteredRange.getDisplayValues()
-  const resultArray = []; // my categories | operation type
+  const resultArray: any[][] = []; // my categories | operation type
 
   for (const rowInd in tinkoffDataFilteredValues) {
     const rowDataValues = tinkoffDataFilteredValues[rowInd]
 
-    const tEntry = new TinkoffDataRowEntry(rowDataValues)
+    const tinkoffEntry = new TinkoffDataRowEntry(rowDataValues)
 
-    addElementAsArrayTo(resultArray, tEntryPropertyChooser(tEntry))
+    addElementAsArrayTo(resultArray, tinkoffEntryPropertyChooser(tinkoffEntry))
   }
 
   const rangeToWriteResult = rangeToWriteResultChooser()
@@ -74,19 +74,6 @@ function defineAndFill(
 
 /**
  * Step 5. Make cell values for operation type and my category column selectable for manual adjustmnents
- */
-function makeSelectable(range: GoogleAppsScript.Spreadsheet.Range, valuesList: string[]) {
-  const rule = dropdownValidationRule(valuesList)
-  range.setDataValidation(rule)
-}
-
-function requireDateValidationForRange(range: GoogleAppsScript.Spreadsheet.Range) {
-  range.setDataValidation(dateValidationRule())
-  range.setNumberFormat("dd.MM.yyyy")
-}
-
-/**
- * Step 5
  * @param myCategoriesRange is necessary to take values of its cell with no performance impact
  */
 function makeTinkoffDataMyCategoriesSelectableAccordingTo(
@@ -184,17 +171,15 @@ function fixTinkoffNumberColums(tinkoffDataFilteredRange: GoogleAppsScript.Sprea
     )
   }
 
-  const operationAmountRange = getSingleColumnNumbersRange(TINKOFF__AMOUNT_POS) // Y col
-  const paymentAmountRange = getSingleColumnNumbersRange(TINKOFF__PAYMENT_AMOUNT_POS) // AA col
-  const bonusesRange = getSingleColumnNumbersRange(TINKOFF__BONUSES_POS) // AG col
-  const invsestmentRoundingRange = getSingleColumnNumbersRange(TINKOFF__INVESTMENT_ROUNDING__POS) // AH col
-  const amountRoundedRange = getSingleColumnNumbersRange(TINKOFF__AMOUNT_ROUNDED_POS) // AI col
+  const operationAmountRange = getSingleColumnNumbersRange(TINKOFF__AMOUNT_POS) 
+  const paymentAmountRange = getSingleColumnNumbersRange(TINKOFF__PAYMENT_AMOUNT_POS)
+  const bonusesRange = getSingleColumnNumbersRange(TINKOFF__BONUSES_POS) 
+  const invsestmentRoundingRange = getSingleColumnNumbersRange(TINKOFF__INVESTMENT_ROUNDING__POS) 
+  const amountRoundedRange = getSingleColumnNumbersRange(TINKOFF__AMOUNT_ROUNDED_POS)
   const rangesArr = [operationAmountRange, paymentAmountRange, bonusesRange, invsestmentRoundingRange, amountRoundedRange]
 
   rangesArr.forEach(range => {
-    const resultArray: number[][] = range.getValues().map(itArr => {
-      return itArr.map(it => { return asNumber(it) })
-    })
+    const resultArray: number[][] = range.getValues().map(itArr => itArr.map(it => asNumber(it)))
 
     range.setValues(resultArray)
     range.setHorizontalAlignment("left")
@@ -230,7 +215,7 @@ function highlightManuallyEditedOperationTypesAndMyCategories(tinkoffDataFiltere
 /**
  * On recalculation planned rows coloring is somehow lost (we need to restore it)
  */
-function highlightIsPlannedRows(tinkoffDataFilteredRange: GoogleAppsScript.Spreadsheet.Range) {
+function highlightPlannedRows(tinkoffDataFilteredRange: GoogleAppsScript.Spreadsheet.Range) {
   const isPlannedSingleColumnRange = getTinkoffDataIsPlannedRange(tinkoffDataFilteredRange)
   const columnOffset = 0 // the same column
 

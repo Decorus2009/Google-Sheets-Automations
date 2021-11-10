@@ -1,3 +1,9 @@
+function refresh() {
+  processTinkoffData()
+
+  processDailyAndMonthlyStatistics()
+}
+
 function processTinkoffData() {
   prepareOperationTypesAndMyCategoriesUsingTinkoffData()
 
@@ -8,7 +14,8 @@ function processDailyAndMonthlyStatistics() {
   // scan if there are red cells in 'operation type' and 'my category' ranges (tinkoff and other)
   checkForUnfilledCellsInData()
 
-  clearOldDailyAndMonthlyStatistics()
+  clearOldDailyStatistics()
+  clearOldMonthlyStatistics()
 
   const mergedUniversalDataEntries = mergeAndSortByDateTinkoffAndOtherDataEntries()
   const datesToUniversalDataEntries = mapByDate(mergedUniversalDataEntries)
@@ -17,11 +24,27 @@ function processDailyAndMonthlyStatistics() {
 
   computeMonthlyStatistics(mergedUniversalDataEntries)
 
-  compareEstimatedAndActualExpensesAux()
+  compareEstimatedAndActualMonthlyExpensesAux()
 
   formatAllValues()
 }
 
-function sortSelectedEstimationRecords() {
-  sortSelectedEstimationRecords0()
+/**
+ * A lighter version of [processDailyAndMonthlyStatistics] triggered on editing of cells influencing 
+ * daily statistics only
+ * 
+ * E.g. redefining daily budget value, no need to touch months
+ */
+ function processDailyStatistics() {
+  // scan if there are red cells in 'operation type' and 'my category' ranges (tinkoff and other)
+  checkForUnfilledCellsInData()
+
+  clearOldDailyStatistics()
+
+  const mergedUniversalDataEntries = mergeAndSortByDateTinkoffAndOtherDataEntries()
+  const datesToUniversalDataEntries = mapByDate(mergedUniversalDataEntries)
+
+  computeDailyStatistics(datesToUniversalDataEntries)
+
+  formatAllValues()
 }

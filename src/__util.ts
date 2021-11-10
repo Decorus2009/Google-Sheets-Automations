@@ -36,8 +36,16 @@ function extendAndFillUsingRange(
   range: GoogleAppsScript.Spreadsheet.Range,
   dummyElement: string
 ) {
-  extend(array, range.getNumRows(), dummyElement)
-  fillRange(range, array)
+  while (array.length < range.getNumRows()) {
+    const dummyRow = []
+    for (var i = 0; i < range.getNumColumns(); i++) {
+      dummyRow.push(dummyElement) 
+    }
+
+    array.push(dummyRow)
+  }
+
+  range.setValues(array)
 }
 
 /**

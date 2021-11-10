@@ -13,13 +13,25 @@ function clearTinkoffAndOtherData() {
   requireDateValidationForOtherDataDateColumn()
 }
 
-function clearOldDailyAndMonthlyStatistics() {
-  [
+function clearOldDailyStatistics() {
+  clearOldStatistics([
+    getDailyRangeText(DAILY__EXPENSE_INCLUDING_PLANNED_LETTER, DAILY__DAILY_BALANCE_LETTER),
+  ])
+}
+
+function clearOldMonthlyStatistics() {
+  clearOldStatistics([
     MONTHLY__ACTUAL_INCOMES_RANGE_TEXT,
     MONTHLY__ACTUAL_EXPENSES_RANGE_TEXT,
-    getDailyRangeText(DAILY__EXPENSE_INCLUDING_PLANNED_LETTER, DAILY__DAILY_BALANCE_LETTER),
     MONTHLY__AUX_RANGE_TEXT
-  ].map(rangeText => {
+  ])
+}
+
+
+// ======================================== PRIVATE ========================================
+
+function clearOldStatistics(rangeTexts: string[]) {
+  rangeTexts.map(rangeText => {
     const range = getRange(rangeText)
 
     range.clear()

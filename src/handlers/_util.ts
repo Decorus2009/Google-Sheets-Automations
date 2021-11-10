@@ -130,12 +130,13 @@ function formatAllValues() {
   auxSavingsRange.setTextStyle(SpreadsheetApp.newTextStyle()
     .setFontFamily(FONT)
     .setFontSize(11)
+    .setBold(true)
     .build())
 
-  auxSavingsHeaderRange.setTextStyle(SpreadsheetApp.newTextStyle()
-    .setFontFamily(FONT)
-    .setFontSize(12)
-    .build())
+  // auxSavingsHeaderRange.setTextStyle(SpreadsheetApp.newTextStyle()
+  //   .setFontFamily(FONT)
+  //   .setFontSize(12)
+  //   .build())
 }
 
 

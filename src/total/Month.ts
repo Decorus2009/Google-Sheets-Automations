@@ -36,7 +36,7 @@ function computeActualMonthlyStatistics(
     return
   }
 
-  var resultArray = [];
+  var resultArray: any[] = [];
   // note the 'forEach' signature (value goes first)
   myCategoriesToAmounts.forEach((value, key) => { resultArray.push([key, value]) })
 
@@ -66,7 +66,7 @@ function computeActualMonthlyStatistics(
  * 
  * Also I have to set background and font colors to GENERAL_BACKGROUND_COLOR
  */
-function compareEstimatedAndActualExpensesAux() {
+function compareEstimatedAndActualMonthlyExpensesAux() {
   function fillMap(displayValues: string[][]): Map<string, number> {
     const categoriesToAmounts = new Map<string, number>()
   

@@ -16,7 +16,7 @@ function isTransport(entry: TinkoffDataRowEntry): boolean {
  * There's a small probability that I can remove an entry 
  * for a true ride payment somehow equal to 250 RUB
  */
-function isMolniaEntryToRemove(entry: TinkoffDataRowEntry): boolean {
+ function isMolniaEntryToRemove(entry: TinkoffDataRowEntry): boolean {
   if (isMolniaEntry(entry)) {
     const absAmount = Math.abs(entry.rawAmout)
     if (inArray([MOLNIA_INITIAL_AMOUNT_ABS, MOLNIA_REGULAR_AMOUNT_ABS], absAmount)) {
